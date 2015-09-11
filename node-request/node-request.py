@@ -1,6 +1,6 @@
 import json
 import random
-import binascii
+import base64
 from Crypto.Cipher import AES
 from Crypto import Random
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
@@ -12,7 +12,7 @@ from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 secret = 'pre-Shared secret abcdefghijklmn' # 32 characters
 
 rpc_user = 'auroracoinrpc'
-rpc_password = 'secret'
+rpc_password = ''
 rpc_host = '127.0.0.1'
 rpc_port = '12341'
 
@@ -40,16 +40,16 @@ json_data = json.dumps(data)
 
 #print(json_data)
 
+num = int((len(json_data)/AES.block_size) + 1)
+
 # Encrypt it
 key = bytes(secret, 'utf-8')
+# AES.block_size = 16, which translates to MCRYPT_RIJNDAEL_128 in PHP
 iv = Random.new().read(AES.block_size)
-cipher = AES.new(key, AES.MODE_CFB, iv)
-msg = iv + cipher.encrypt(bytes(json_data, 'utf-8'))
+cipher = AES.new(key, AES.MODE_CBC, iv)
+msg_iv = base64.b64encode(iv)
+msg = base64.b64encode(cipher.encrypt(bytes(json_data.rjust(num * AES.block_size), 'utf-8')))
 
 # Send to the collecting server
-encoded = binascii.hexlify(msg)
+print(msg_iv)
 print(msg)
-print('\n')
-print(encoded)
-print('\n')
-print(binascii.unhexlify(encoded))
