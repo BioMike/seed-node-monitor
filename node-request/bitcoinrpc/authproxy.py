@@ -74,7 +74,10 @@ class JSONRPCException(Exception):
 
 def EncodeDecimal(o):
     if isinstance(o, decimal.Decimal):
-        return round(o, 8)
+        return float(round(o, 8))
+        # Bug https://github.com/jgarzik/python-bitcoinrpc/pull/39
+        # This is a workaround until jgarzik fixes this solution for real.
+        #return round(o, 8)
     raise TypeError(repr(o) + " is not JSON serializable")
 
 class AuthServiceProxy(object):
