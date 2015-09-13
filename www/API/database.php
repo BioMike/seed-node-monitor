@@ -23,7 +23,7 @@ class Database
 	    {
 	    sqlite_exec($this->db, "CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)");
 	    //$now = time();
-	    //sqlite_exec($this->db, "INSERT INTO seeds (ip_address, password, timepoint, blocks, connections, difficulty, nethashrate) VALUES ('127.0.0.1', 'pre-Shared secret abcdefghijklmn', $now, 0, 0, 0, 0)"
+	    //sqlite_exec($this->db, "INSERT INTO seeds (ip_address, password, timepoint, blocks, connections, difficulty, nethashrate) VALUES ('127.0.0.1', 'pre-Shared secret abcdefghijklmn', $now, 0, 0, 0, 0)");
 	    }
 	}
 

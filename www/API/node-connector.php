@@ -5,7 +5,7 @@ include("database.php");
 // $location is where the database is stored. Store it outside the document tree.
 $location = './seeds/';
 
-$db = Database($location);
+$db = new Database($location);
 
 // The seed node ip address is a determinant for its data.
 $ip_address = $_SERVER['REMOTE_ADDR'];

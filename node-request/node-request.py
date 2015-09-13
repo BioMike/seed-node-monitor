@@ -2,7 +2,7 @@ import json
 import random
 import base64
 import urllib
-import urllib2
+import urllib.request
 
 from Crypto.Cipher import AES
 from Crypto import Random
@@ -58,8 +58,7 @@ parameters = {'iv': msg_iv, 'msg': msg}
 #print(msg_iv)
 #print(msg)
 
-params = urllib.urlencode(parameters)
-req = urllib2.Request(monitor_url, params)
+params = urllib.parse.urlencode(parameters).encode('utf-8')
+req = urllib.request.Request(monitor_url, params)
 req.add_header("Content-type", "application/x-www-form-urlencoded")
-response = urllib2.urlopen(req)
-
+response = urllib.request.urlopen(req)
