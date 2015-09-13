@@ -1,9 +1,25 @@
 <?php
-// $msg contains a real encrypted message. $iv is the IV that belongs with it. Let's see if we can decrypt it in PHP
-$iv = "vCCgcZvaTguiMdq0SVVa4w==";
-$msg = "eFxHUokk2GXosM2pgEcb0ng0TXafEdxRouN5t8e3vWwCuLpwJ1A13qoIgC0uJU6j1qYrLRT3MYpi1KxI7PoxXy7oNWxUlWyvwe8QK5AhEoIkztIShbuBC3OUwtCknIo0/+xc77kM7WFvDX4iFwnP3w==";
+include("database.php");
 
-$password = "pre-Shared secret abcdefghijklmn";
+// Settings
+// $location is where the database is stored. Store it outside the document tree.
+$location = './seeds/';
+
+$db = Database($location);
+
+// The seed node ip address is a determinant for its data.
+$ip_address = $_SERVER['REMOTE_ADDR'];
+
+// Get the data
+$iv = $_POST['iv'];
+$msg = $_POST['msg'];
+
+$password = $db->get_password($ip_address);
+if(!$password)
+    {
+    // Node not found.
+    die();
+    }
 $key = mb_convert_encoding($password, "UTF-8");
 
 // MCRYPT_RIJNDAEL_128, we use a 16 bit key.
@@ -11,8 +27,6 @@ $json_data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, base64_decode($msg), MCRY
 
 $data = json_decode(ltrim($json_data));
 
-echo "\n";
-print_r($data);
-echo "\n";
+$db->update_node($ip_address, $data['blocks'], $data['connections'], $data['difficulty'], $data['$nethashrate']);
 
 ?>

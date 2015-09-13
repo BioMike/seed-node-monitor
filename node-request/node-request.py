@@ -1,12 +1,14 @@
 import json
 import random
 import base64
+import urllib
+import urllib2
+
 from Crypto.Cipher import AES
 from Crypto import Random
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 
 # Base settings
-
 # Settings, change them here
 
 secret = 'pre-Shared secret abcdefghijklmn' # 32 characters
@@ -17,7 +19,7 @@ rpc_host = '127.0.0.1'
 rpc_port = '12341'
 
 # Settings, most likely not to change them
-monitor_host = ''
+monitor_url = 'http://seeds.auroracoin.is/API/node-connector.php'
 
 # Connecting to node
 rpc_connection = AuthServiceProxy("http://%s:%s@%s:%s" % (rpc_user, rpc_password, rpc_host, rpc_port))
@@ -50,6 +52,14 @@ cipher = AES.new(key, AES.MODE_CBC, iv)
 msg_iv = base64.b64encode(iv)
 msg = base64.b64encode(cipher.encrypt(bytes(json_data.rjust(num * AES.block_size), 'utf-8')))
 
+parameters = {'iv': msg_iv, 'msg': msg}
+
 # Send to the collecting server
-print(msg_iv)
-print(msg)
+#print(msg_iv)
+#print(msg)
+
+params = urllib.urlencode(parameters)
+req = urllib2.Request(monitor_url, params)
+req.add_header("Content-type", "application/x-www-form-urlencoded")
+response = urllib2.urlopen(req)
+
