@@ -35,11 +35,11 @@ class Database
     function update_node($ip_address, $blocks, $conn, $diff, $nethashrate)
 	{
 	$now = time();
-	$stmt = $this->db->prepare("UPDATE seeds SET blocks=:block, connections=:conn, difficulty=:diff, nethashrate=:nhr, timepoint=:now WHERE ip_address=:ip LIMIT 1");
+	$stmt = $this->db->prepare("UPDATE seeds SET blocks=:blocks, connections=:conn, difficulty=:diff, nethashrate=:nhr, timepoint=:now WHERE ip_address=:ip");
 	$stmt->bindValue(':ip', $ip_address, SQLITE3_TEXT);
 	$stmt->bindValue(':blocks', $blocks, SQLITE3_INTEGER);
 	$stmt->bindValue(':conn', $conn, SQLITE3_INTEGER);
-	$stmt->bindValue(':diff', $diff, SQLITE3_FLOAT);
+	$stmt->bindValue(':diff', $diff);
 	$stmt->bindValue(':nhr', $nethashrate, SQLITE3_INTEGER);
 	$stmt->bindValue(':now', $now, SQLITE3_INTEGER);
 	$result = $stmt->execute();
