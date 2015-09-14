@@ -15,35 +15,39 @@ class Database
 	    }
 	
 	// Open the database.
-	$this->db = sqlite_open($filename);
+	$this->db = new SQLite3($filename);
 	
 	// Create the seeds table if the file didn't exist.
 	// Note no seeds are inserted here by default. Uncomment/Edit below to define nodes that should be added to the system.
 	if($db_new)
 	    {
-	    sqlite_exec($this->db, "CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)");
+	    $this->db->exec("CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)");
 	    //$now = time();
-	    //sqlite_exec($this->db, "INSERT INTO seeds (ip_address, password, timepoint, blocks, connections, difficulty, nethashrate) VALUES ('127.0.0.1', 'pre-Shared secret abcdefghijklmn', $now, 0, 0, 0, 0)");
+	    //$this->db->exec("INSERT INTO seeds (ip_address, password, timepoint, blocks, connections, difficulty, nethashrate) VALUES ('127.0.0.1', 'pre-Shared secret abcdefghijklmn', $now, 0, 0, 0, 0)");
 	    }
 	}
 
-    function __descruct()
+    function __destruct()
 	{
-	sqlite_close($his->db);
+	$this->db->close();
 	}
 
     function update_node($ip_address, $blocks, $conn, $diff, $nethashrate)
 	{
 	$now = time();
-	sqlite_exec($this->db, "UPDATE seeds SET blocks=$blocks, connections=$conn, difficulty=$diff, nethashrate=$nethashrate, timepoint=$now WHERE ip_address=$ip_address LIMIT 1");
+	$this->db->exec("UPDATE seeds SET blocks=$blocks, connections=$conn, difficulty=$diff, nethashrate=$nethashrate, timepoint=$now WHERE ip_address=$ip_address LIMIT 1");
 	}
 
     function get_password($ip_address)
 	{
-	$res = sqlite_query($this->db, "SELECT password FROM seeds where ip_address=$ip_address LIMIT 1");
-	if(sqlite_num_rows($res) > 0)
+	$stmt = $this->db->prepare("SELECT password FROM seeds WHERE ip_address=:ip LIMIT 1");
+	$status = $stmt->bindValue(':ip', $ip_address, SQLITE3_TEXT);
+	$result = $stmt->execute();
+	if($result->numColumns())
 	    {
-	    $retval = sqlite_fetch_single($res);
+	    $result->reset();
+	    $data = $result->fetchArray();
+	    $retval = $data[0];
 	    }
 	    else
 	    {
