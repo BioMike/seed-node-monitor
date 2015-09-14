@@ -27,6 +27,6 @@ $json_data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, base64_decode($msg), MCRY
 
 $data = json_decode(ltrim($json_data), true);
 
-$db->update_node($ip_address, $data['blocks'], $data['connections'], $data['difficulty'], $data['$nethashrate']);
+$db->update_node($ip_address, $data['blocks'], $data['connections'], $data['difficulty'], $data['nethashrate']);
 
 ?>

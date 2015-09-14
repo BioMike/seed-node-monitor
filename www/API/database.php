@@ -35,13 +35,20 @@ class Database
     function update_node($ip_address, $blocks, $conn, $diff, $nethashrate)
 	{
 	$now = time();
-	$this->db->exec("UPDATE seeds SET blocks=$blocks, connections=$conn, difficulty=$diff, nethashrate=$nethashrate, timepoint=$now WHERE ip_address=$ip_address LIMIT 1");
+	$stmt = $this->db->prepare("UPDATE seeds SET blocks=:block, connections=:conn, difficulty=:diff, nethashrate=:nhr, timepoint=:now WHERE ip_address=:ip LIMIT 1");
+	$stmt->bindValue(':ip', $ip_address, SQLITE3_TEXT);
+	$stmt->bindValue(':blocks', $blocks, SQLITE3_INTEGER);
+	$stmt->bindValue(':conn', $conn, SQLITE3_INTEGER);
+	$stmt->bindValue(':diff', $diff, SQLITE3_FLOAT);
+	$stmt->bindValue(':nhr', $nethashrate, SQLITE3_INTEGER);
+	$stmt->bindValue(':now', $now, SQLITE3_INTEGER);
+	$result = $stmt->execute();
 	}
 
     function get_password($ip_address)
 	{
 	$stmt = $this->db->prepare("SELECT password FROM seeds WHERE ip_address=:ip LIMIT 1");
-	$status = $stmt->bindValue(':ip', $ip_address, SQLITE3_TEXT);
+	$stmt->bindValue(':ip', $ip_address, SQLITE3_TEXT);
 	$result = $stmt->execute();
 	if($result->numColumns())
 	    {
