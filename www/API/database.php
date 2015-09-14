@@ -21,9 +21,9 @@ class Database
 	// Note no seeds are inserted here by default. Uncomment/Edit below to define nodes that should be added to the system.
 	if($db_new)
 	    {
-	    $this->db->exec("CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)");
+	    $this->db->exec("CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)");
 	    //$now = time();
-	    //$this->db->exec("INSERT INTO seeds (ip_address, password, timepoint, blocks, connections, difficulty, nethashrate) VALUES ('127.0.0.1', 'pre-Shared secret abcdefghijklmn', $now, 0, 0, 0, 0)");
+	    //$this->db->exec("INSERT INTO seeds (ip_address, password, timepoint, blocks, connections, difficulty, nethashrate) VALUES ('127.0.0.1', 'pre-Shared secret abcdefghijklmn', 'Home', $now, 0, 0, 0, 0)");
 	    }
 	}
 
