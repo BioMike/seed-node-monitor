@@ -62,5 +62,17 @@ class Database
 	    }
 	return($retval);
 	}
+
+    function get_seeds_data()
+	{
+	$return_data = array();
+	$stmt = $this->db->prepare("SELECT name, timepoint, blocks, connections, difficulty, nethashrate FROM seeds");
+	$result = $stmt->execute()
+	while($data = $result->fetchArray(SQLITE3_ASSOC))
+	    {
+	    $return_data[] = $data;
+	    }
+	return($return_data);
+	}
     }
 ?>
