@@ -1,0 +1,90 @@
+body
+    {
+    margin:			0px;
+    background-color:		white;
+    }
+
+div.top
+    {
+    height:			40px;
+    width:			100%;
+    background-color:		#016959;
+    border-width:		0px 0px 4px 0px;
+    border-style:		solid;
+    border-color:		#004b3f;
+    padding:			20px;
+    color:			white;
+    font-size:			30px;
+    font-family:		Verdana, sans;
+    }
+
+
+div.body
+    {
+    min-height:			330px;
+    width			100%;
+    background-color:		white;
+    padding:			10px;
+    margin:			auto;
+    }
+
+div.info
+    {
+    float:			left;
+    width:			250px;
+    min-height:			220px;
+    background-color:		#93accd;
+    padding:			10px;
+    margin-right:		10px;
+    font-family:		Verdana, sans;
+    }
+
+div.node-list
+    {
+    float:			left;
+    width:			770px;
+    background-color:		white;
+    padding:			10px;
+    }
+
+div.node-entry
+    {
+    width:			750px;
+    margin:			auto;
+    height:			30px;
+    background-color:		white;
+    padding:			5px;
+    margin-bottom:		10px;
+    color:			#575859;
+    font-family:		Verdana, sans;
+    }
+
+div.node-name
+    {
+    float:			left;
+    width:			150px;
+    }
+
+div.node-blocks
+    {
+    float:			left;
+    width:			100px;
+    }
+
+div.node-diff
+    {
+    float:			left;
+    width:			150px;
+    }
+
+div.node-conn
+    {
+    float:			left;
+    width:			150px;
+    }
+
+div.node-nhr
+    {
+    float:			left;
+    width:			150px;
+    }
