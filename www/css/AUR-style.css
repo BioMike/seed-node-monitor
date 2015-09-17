@@ -1,6 +1,7 @@
 body
     {
     margin:			0px;
+    padding:			0px;
     background-color:		white;
     }
 
@@ -12,27 +13,30 @@ div.top
     border-width:		0px 0px 4px 0px;
     border-style:		solid;
     border-color:		#004b3f;
-    padding:			20px;
+    padding-top:		20px;
+    padding-bottom:		20px;
     color:			white;
     font-size:			30px;
     font-family:		Verdana, sans;
     }
 
+div.top_content
+    {
+    padding-left:		20px;
+    }
 
-div.body
+div.main
     {
     min-height:			330px;
     width:			100%;
     background-color:		white;
-    padding:			10px;
-    margin:			auto;
     }
 
 div.info
     {
     float:			left;
     width:			250px;
-    min-height:			220px;
+    min-height:			300px;
     background-color:		#93accd;
     padding:			10px;
     margin-right:		10px;
@@ -44,7 +48,7 @@ div.node-list
     float:			left;
     width:			770px;
     background-color:		white;
-    padding:			10px;
+    padding:			5px;
     }
 
 div.node-entry
