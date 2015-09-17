@@ -2,24 +2,21 @@
 <head>
 <title>Seed node monitoring page for Auroracoin.</title>
 <link rel="stylesheet" href="css/AUR-style.css" type="text/css">
-<link rel="stylesheet" href="http://www.betalenmetguldencoin.nl/js/jquery-ui-1.11.1/jquery-ui.min.css" media="all">
-<script src="http://www.betalenmetguldencoin.nl/js/jquery-1.11.1.min.js"></script>
-<script src="http://www.betalenmetguldencoin.nl/js/jquery-ui-1.11.1/jquery-ui.min.js"></script>
+<script src="/js/jquery-1.11.3.min.js"></script>
 <script src="/js/seed-data.js"></script>
 </head>
 <body onload="init()">
 <div class="top">
 seeds.auroracoin.is - Seed node monitor
 </div>
-<div class="main">
+<div class="body">
 <div class="info">Info</div>
 <div class="node-list">
-<div class="node-entry"><div class="node-name">Node</div><div class="node-blocks">Blocks</div><div class="node-diff">Difficulty</div>
+<div class="node-entry-head"><div class="node-name">Node</div><div class="node-blocks">Blocks</div><div class="node-diff">Difficulty</div>
 <div class="node-conn">Connections</div><div class="node-nhr">Nethashrate</div></div>
-<div class="node-entry"><div class="node-name">Luxembough</div><div class="node-blocks">2551234</div><div class="node-diff">1234567891234</div>
-<div class="node-conn">40</div><div class="node-nhr">1234567891234</div></div>
-<div class="node-entry"><div class="node-name">Iceland 1</div><div class="node-blocks">2551234</div><div class="node-diff">1234567891234</div>
-<div class="node-conn">42</div><div class="node-nhr">1234567891234</div></div>
+</div>
+<div class="node-list" id="nodelist">
+<div class="node-entry"><div class="warning">seeds.auroracoin.is requires javascript. Please activate it.</div></div>
 </div>
 </div>
 </body>

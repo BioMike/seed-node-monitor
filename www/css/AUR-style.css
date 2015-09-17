@@ -19,7 +19,7 @@ div.top
     }
 
 
-div.main
+div.body
     {
     min-height:			330px;
     width:			100%;
@@ -59,6 +59,19 @@ div.node-entry
     font-family:		Verdana, sans;
     }
 
+div.node-entry-head
+    {
+    width:			750px;
+    margin:			auto;
+    height:			20px;
+    background-color:		white;
+    padding:			5px;
+    margin-bottom:		2px;
+    color:			#575859;
+    font-family:		Verdana, sans;
+    font-weight:		bold;
+    }
+
 div.node-name
     {
     float:			left;
@@ -87,4 +100,11 @@ div.node-nhr
     {
     float:			left;
     width:			150px;
+    }
+
+div.warning
+    {
+    color:			#ef5301;
+    font-family:		Verdana, sans;
+    font-weight:		bold;
     }
