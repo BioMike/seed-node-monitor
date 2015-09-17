@@ -67,7 +67,7 @@ class Database
 	{
 	$return_data = array();
 	$stmt = $this->db->prepare("SELECT name, timepoint, blocks, connections, difficulty, nethashrate FROM seeds");
-	$result = $stmt->execute()
+	$result = $stmt->execute();
 	while($data = $result->fetchArray(SQLITE3_ASSOC))
 	    {
 	    $return_data[] = $data;
