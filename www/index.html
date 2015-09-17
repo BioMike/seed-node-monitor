@@ -1,13 +1,17 @@
 <html>
 <head>
-<link rel="stylesheet" href="css/AUR-style.css" type="text/css">
 <title>Seed node monitoring page for Auroracoin.</title>
+<link rel="stylesheet" href="css/AUR-style.css" type="text/css">
+<link rel="stylesheet" href="http://www.betalenmetguldencoin.nl/js/jquery-ui-1.11.1/jquery-ui.min.css" media="all">
+<script src="http://www.betalenmetguldencoin.nl/js/jquery-1.11.1.min.js"></script>
+<script src="http://www.betalenmetguldencoin.nl/js/jquery-ui-1.11.1/jquery-ui.min.js"></script>
+<script src="/js/seed-data.js"></script>
 </head>
 <body>
 <div class="top">
 seeds.auroracoin.is - Seed node monitor
 </div>
-<div class="body">
+<div class="body" onload="init()">
 <div class="info">Info</div>
 <div class="node-list">
 <div class="node-entry"><div class="node-name">Node</div><div class="node-blocks">Blocks</div><div class="node-diff">Difficulty</div>
