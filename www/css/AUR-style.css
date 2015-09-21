@@ -35,13 +35,14 @@ div.main
 div.info
     {
     float:			left;
-    width:			250px;
-    min-height:			300px;
+    width:			200px;
+    min-height:			320px;
     background-color:		#93accd;
     padding:			15px;
     margin-right:		10px;
     font-family:		Verdana, sans;
     text-align:			justify;
+    font-size:			12px;
     }
 
 div.node-list
