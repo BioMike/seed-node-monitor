@@ -26,7 +26,7 @@ The following crontab setting executes node-request.py every minute:
 
 ###Requirements:
 * A webserver supporting PHP
-* PHP version 5.6 or higher, with support of Sqlite 3
+* PHP version 5.3 or higher, with support of Sqlite 3
 
 ###Instructions:
 1. Make a folder outside the webserver document root tree, but writable by the webserver.
