@@ -31,6 +31,6 @@ The following crontab setting executes node-request.py every minute:
 ###Instructions:
 1. Make a folder outside the webserver document root tree, but writable by the webserver.
 2. Copy the contents of the www folder into the document root tree.
-3. Change API/node-collector.php to point the location to the folder in point 1 (var: $location).
+3. Change API/node-collector.php and API/seed-data.php files to point the location to the folder in point 1 (var: $location).
 4. Generate some passwords with the pw-gen.py script in utils.
 5. Open API/database.php and change the lines (line 25 and 26 as example) for creating the database.
