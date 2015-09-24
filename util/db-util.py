@@ -19,15 +19,44 @@
 import argparse
 import sqlite3
 import os.path
+import random, string
+import time
 
 class Database:
    def __init__(self, dbfile):
       self.db = sqlite3.connect(dbfile)
-      self.cur = conn.cursor()
+      self.cur = self.db.cursor()
+
+   def create_database(self):
+      self.cur.execute("CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)")
+      self.db.commit()
 
    def get_nodes(self):
       self.cur.execute('SELECT * FROM seeds')
-      print(c.fetchall())
+      return(self.cur.fetchall())
+
+   def insert_node(self, ip_address, name):
+      search_string = string.ascii_letters + string.digits
+      word1=''.join(random.choice(search_string) for i in range(10))
+      word2=''.join(random.choice(search_string) for i in range(10))
+      word3=''.join(random.choice(search_string) for i in range(10))
+      password="%s-%s-%s" % (word1, word2, word3)
+      now = int(time.time())
+      self.cur.execute("INSERT INTO seeds (ip_address, password, name, timepoint, blocks, connections, difficulty, nethashrate) VALUES (?, ?, ?, ?, 0, 0, 0, 0)", (ip_address, password, name, now))
+      self.db.commit()
+
+   def delete_node(self, name):
+      self.cur.execute("DELETE FROM seeds WHERE name=?", (name, ))
+      self.db.commit()
+
+def new_node(db):
+   name = input("Node name: ")
+   ip_address = input("Node IP address: ")
+   db.insert_node(ip_address, name)
+
+def delete_node(db):
+   name = input("Node name: ")
+   db.delete_node(name)
 
 
 parser = argparse.ArgumentParser(description='seed-node-monitor database utility')
@@ -39,5 +68,39 @@ if(os.path.isfile(args.database)):
    db = Database(args.database)
    db.get_nodes()
 else:
-   print("Database '%s' does not exist. Do you want to create it? [Y/n]" % (args.database))
-   command = input("[Y/n] ")
+   command=''
+   while(str.upper(command) != 'Y' and str.upper(command) != 'N'):
+      print("Database '%s' does not exist. Do you want to create it? [Y/n]" % (args.database))
+      command = input("[Y/n] ")
+      if(command == ""):
+         command = "Y"
+   if(str.upper(command) == "Y"):
+      db = Database(args.database)
+      db.create_database()
+      db.get_nodes()
+   if(str.upper(command) == "N"):
+      exit()
+
+#start the main loop
+
+while(True):
+   command=''
+   nodes = db.get_nodes()
+   print("Name\tIP address\tPassword")
+   for node in nodes:
+      print("%s\t%s\t%s" % (node[2], node[0], node[1]))
+   print("\n")
+   command = input("Enter \'H\' for help or a command > ")
+   if(str.upper(command) == "Q"):
+      exit()
+   if(str.upper(command) == "N"):
+      new_node(db)
+   if(str.upper(command) == "D"):
+      delete_node(db)
+   if(str.upper(command) == "H"):
+      print("\n\nHelp screen:")
+      print("H\tThis help screen")
+      print("N\tAdd a new node")
+      print("D\tDelete a node")
+      print("Q\tQuit the util\n\n")
+
