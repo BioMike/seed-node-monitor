@@ -55,7 +55,7 @@ def new_node(db):
    db.insert_node(ip_address, name)
 
 def delete_node(db):
-   name = input("Node name: ")
+   name = input("Node name (case-sensitive): ")
    db.delete_node(name)
 
 
@@ -86,9 +86,17 @@ else:
 while(True):
    command=''
    nodes = db.get_nodes()
-   print("Name\tIP address\tPassword")
+   print("Name                       IP address       Password")
+   print('-'*79)
    for node in nodes:
-      print("%s\t%s\t%s" % (node[2], node[0], node[1]))
+      if(len(node[2]) > 25):
+         seed_name = node[2][0:22] + "...  "
+      else:
+         padding = 27 - len(node[2])
+         seed_name = node[2] + (padding*' ')
+      padding_ip = 17 - len(node[0])
+      ip_address = node[0] + (padding_ip*' ')
+      print("%s%s%s" % (seed_name, ip_address, node[1]))
    print("\n")
    command = input("Enter \'H\' for help or a command > ")
    if(str.upper(command) == "Q"):
@@ -103,4 +111,3 @@ while(True):
       print("N\tAdd a new node")
       print("D\tDelete a node")
       print("Q\tQuit the util\n\n")
-
