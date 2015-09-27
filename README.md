@@ -5,10 +5,13 @@ Monitoring system for crypto currency seed nodes
 ##Installation of data collecting software
 
 ###Requirements:
-* Python 3
+* Python 3, including requests module
 * python-bitcoinrpc: Supplied with source in case not available system wide
-* pycrypto: Ubuntu users should install the python3-crypto package
-* python requests module: Not installed by default with python on Ubuntu (apt-get install pip && pip install requests)
+* pycrypto
+
+###Ubuntu notes
+The requests module is not installed by default on Ubuntu. Use "apt-get install pip && pip install requests" to install it
+Ubuntu users should also install the python3-crypto package for pycrypto.
 
 ###Instructions:
 1. Change the settings in node-request.py to reflect the coin daemon settings (var: rpc_*).
