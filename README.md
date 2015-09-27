@@ -10,7 +10,7 @@ Monitoring system for crypto currency seed nodes
 * pycrypto
 
 ###Ubuntu notes
-The requests module is not installed by default on Ubuntu. Use "apt-get install pip && pip install requests" to install it
+The requests module is not installed by default on Ubuntu. Use "apt-get install pip && pip install requests" to install it.
 Ubuntu users should also install the python3-crypto package for pycrypto.
 
 ###Instructions:
