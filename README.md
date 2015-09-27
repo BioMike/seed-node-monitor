@@ -8,12 +8,13 @@ Monitoring system for crypto currency seed nodes
 * Python 3
 * python-bitcoinrpc: Supplied with source in case not available system wide
 * pycrypto: Ubuntu users should install the python3-crypto package
+* python requests module: Not installed by default with python on Ubuntu (apt-get install pip && pip install requests)
 
 ###Instructions:
 1. Change the settings in node-request.py to reflect the coin daemon settings (var: rpc_*).
 2. Change the settings in node-request.py to contain the API password (var: secret).
-3. As a test, run node-info.py (If everything is correct the data should be updated on the seed monitor webpage).
-4. Install a crontab to execute it node-info.puy script every x minutes.
+3. As a test, run node-request.py (If everything is correct the data should be updated on the seed monitor webpage).
+4. Install a crontab to execute it node-request.py script every x minutes.
 
 ###Crontab
 The following crontab setting executes node-request.py every minute:
