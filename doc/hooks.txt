@@ -1,0 +1,15 @@
+Random thoughts about the hooks
+-------------------------------
+
+Nodes connect to the API once every X time. In a way we want to check if problems arise and
+push a message to someone to investigate, instead of being dependent on website watching monkeys
+and hope they pass the message through.
+
+I started with an initial Slack webhook implementation, because we use Slack in our auroracoin
+dev team. The idea is that when a problem arises the API sends a message through the webhook
+to a dedicated seed node owner channel in slack.
+
+An other idea is to send an email.
+
+One thing we don't want is the hook spamming the channels/email boxes 5 times a minute, so we 
+need some sort of timeout function. 
