@@ -17,6 +17,7 @@
 
 
 include("database.php");
+include("hooks/slack_hook.php");
 
 // Settings
 // $location is where the database is stored. Store it outside the document tree.
@@ -50,6 +51,12 @@ if($iv && $msg)
     $data = json_decode(ltrim($json_data), true);
 
     $db->update_node($ip_address, $data['blocks'], $data['connections'], $data['difficulty'], $data['nethashrate']);
+    }
+
+$offline_nodes = $db->get_offline_nodes();
+if(count($offline_nodes) > 0)
+    {
+    // Call hooks.
     }
 
 ?>

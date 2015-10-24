@@ -90,4 +90,19 @@ class Database
 	return($return_data);
 	}
     }
+    
+    function get_offline_nodes()
+	{
+	// Get nodes that haven't connected in 5 minutes.
+	$timed_out = time() - 5*60;
+	$return_data = array();
+	$stmt = $this->db->prepare("SELECT name FROM seeds WHERE timepoint<:timedout");
+	$stmt->bindValue(':timedout', $timed_out, SQLITE3_INTEGER);
+	$result = $stmt->execute();
+	while($data = $result->fetchArray(SQLITE3_ASSOC))
+	    {
+	    $return_data[] = $data;
+	    }
+	return($return_data);
+	}
 ?>

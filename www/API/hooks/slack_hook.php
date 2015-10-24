@@ -18,7 +18,7 @@
 
 
 
-slack_send($message)
+function slack_send($message)
     {
     $slack_webhook_url = "";
     $ch = curl_init($slack_webhook_url);
@@ -34,7 +34,5 @@ slack_send($message)
     curl_exec($ch);
     curl_close($ch);
     }
-
-
 
 ?>
