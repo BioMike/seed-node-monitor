@@ -56,7 +56,11 @@ if($iv && $msg)
 $offline_nodes = $db->get_offline_nodes();
 if(count($offline_nodes) > 0)
     {
-    // Call hooks.
+    $timeout = $db->get_conf("hooks-slack-timeout");
+    if($timeout< time())
+	{
+	// Run Slack webhook.
+	}
     }
 
 ?>

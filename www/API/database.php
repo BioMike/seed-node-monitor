@@ -89,8 +89,7 @@ class Database
 	    }
 	return($return_data);
 	}
-    }
-    
+
     function get_offline_nodes()
 	{
 	// Get nodes that haven't connected in 5 minutes.
@@ -105,4 +104,21 @@ class Database
 	    }
 	return($return_data);
 	}
+
+   function get_conf($confkey)
+	{
+	$stmt = $this->db->prepare("SELECT confval FROM config WHERE confkey=:confkey LIMIT 1");
+	$stmt->bindValue(':confkey', $confkey, SQLITE3_TEXT);
+	$result = $stmt->execute();
+	$data = $result->fetchArray(SQLITE3_ASSOC);
+	}
+
+    function set_conf($confkey, $confval)
+	{
+	$stmt = $this->db->prepare("UPDATE config SET confval=:confval WHERE confkey=:confkey");
+	$stmt->bindValue(':confval', $confval, SQLITE3_TEXT);
+	$stmt->bindValue(':confkey', $confkey, SQLITE3_TEXT);
+	$result = $stmt->execute();
+	}
+    }
 ?>
