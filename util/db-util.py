@@ -45,7 +45,11 @@ class Database:
       print("Database updated to version %s" % (updated_version))
 
    def get_conf(self, key):
-      self.cur.execute('SELECT confval FROM config WHERE confkey=?', (key, ))
+      try:
+         self.cur.execute('SELECT confval FROM config WHERE confkey=?', (key, ))
+      except:
+         # Table does not exist
+         return(False)
       result = self.cur.fetchone()
       if result is None:
          return(False)
