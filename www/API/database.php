@@ -111,6 +111,7 @@ class Database
 	$stmt->bindValue(':confkey', $confkey, SQLITE3_TEXT);
 	$result = $stmt->execute();
 	$data = $result->fetchArray(SQLITE3_ASSOC);
+	return($data["confval"]);
 	}
 
     function set_conf($confkey, $confval)
