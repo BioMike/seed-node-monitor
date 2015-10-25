@@ -100,7 +100,7 @@ class Database
 	$result = $stmt->execute();
 	while($data = $result->fetchArray(SQLITE3_ASSOC))
 	    {
-	    $return_data[] = $data;
+	    $return_data[] = $data["name"];
 	    }
 	return($return_data);
 	}

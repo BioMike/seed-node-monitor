@@ -60,7 +60,7 @@ if(count($offline_nodes) > 0)
     if($timeout < time())
 	{
 	// Run Slack webhook.
-	foreach($offline_nodes as $idx => $name)
+	foreach($offline_nodes as $name)
 	    {
 	    $message = "Seed node $name seems to be offline.";
 	    slack_send($message);
