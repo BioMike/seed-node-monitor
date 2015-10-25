@@ -33,6 +33,7 @@ class Database
 	
 	// Open the database.
 	$this->db = new SQLite3($filename);
+	$this->db->busyTimeout(200);
 	
 	// Create the seeds table if the database file didn't exist.
 	// People should use the util/db-util.py tool to add seed nodes to it.
