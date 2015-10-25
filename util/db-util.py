@@ -94,6 +94,8 @@ args = parser.parse_args()
 
 if(os.path.isfile(args.database)):
    db = Database(args.database)
+   # Update the database
+   db.update_database()
    db.get_nodes()
 else:
    command=''
@@ -109,7 +111,7 @@ else:
    if(str.upper(command) == "N"):
       exit()
 
-#start the main loop
+# start the main loop
 
 while(True):
    command=''
