@@ -29,8 +29,20 @@ class Database:
 
    def create_database(self):
       self.cur.execute("CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)")
-      self.cur.execute("CREATE TABLE config (confkey TEXT UNIQUE, confval TEXT");
+      self.cur.execute("CREATE TABLE config (confkey TEXT UNIQUE, confval TEXT")
       self.db.commit()
+      self.set_conf("version", 1)
+      self.set_conf("hooks-slack-timeout", 0)
+
+   def update_database(self):
+      version = self.get_conf("version")
+      if version is False:
+         self.cur.execute("CREATE TABLE config (confkey TEXT UNIQUE, confval TEXT")
+         self.db.commit()
+         self.set_conf("hooks-slack-timeout", 0)
+         self.set_conf("version", 1)
+      updated_version = self.get_conf("version")
+      print("Database updated to version %s" % (updated_version))
 
    def get_conf(self, key):
       self.cur.execute('SELECT confval FROM config WHERE confkey=?', (key, ))

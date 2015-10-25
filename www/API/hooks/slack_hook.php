@@ -33,6 +33,8 @@ function slack_send($message)
 
     curl_exec($ch);
     curl_close($ch);
+    // Slack wants no more than 1 message per second.
+    sleep(1);
     }
 
 ?>

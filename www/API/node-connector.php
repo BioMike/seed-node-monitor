@@ -57,9 +57,17 @@ $offline_nodes = $db->get_offline_nodes();
 if(count($offline_nodes) > 0)
     {
     $timeout = $db->get_conf("hooks-slack-timeout");
-    if($timeout< time())
+    if($timeout < time())
 	{
 	// Run Slack webhook.
+	foreach($offline_nodes as $idx => $name)
+	    {
+	    $message = "Seed node $name seems to be offline.";
+	    slack_send($message);
+	    }
+	// Update the timeout, 1 hour.
+	$to_till = time() + 60*60;
+	$db->set_conf("hooks-slack-timeout", $to_till);
 	}
     }
 
