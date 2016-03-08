@@ -96,9 +96,9 @@ class Database:
       self.cur.execute("INSERT INTO seeds_ma (ip_address, password, name, timepoint, blocks, connections, difficulty_sha256d, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein) VALUES (?, ?, ?, ?, 0, 0, 0, 0, 0, 0)", (ip_address, password, name, now))
       self.db.commit()
 
-   def delete_node(self, name):
-      self.cur.execute("DELETE FROM seeds WHERE name=?", (name, ))
-      self.cur.execute("DELETE FROM seeds_ma WHERE name=?", (name, ))
+   def delete_node(self, ip_address):
+      self.cur.execute("DELETE FROM seeds WHERE ip_address=?", (ip_address, ))
+      self.cur.execute("DELETE FROM seeds_ma WHERE ip_address=?", (ip_address, ))
       self.db.commit()
 
 def new_node(db):
@@ -107,7 +107,7 @@ def new_node(db):
    db.insert_node(ip_address, name)
 
 def delete_node(db):
-   name = input("Node name (case-sensitive): ")
+   name = input("Node ip address: ")
    db.delete_node(name)
 
 
