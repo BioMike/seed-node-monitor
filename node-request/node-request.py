@@ -60,9 +60,12 @@ if nettype == 'default':
    #print(nodeinfo)
    #print(networkhps)
    data = {'nettype': nettype, 'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty': str(difficulty), 'nethashrate': networkhps, 'random': randomness}
-elif nettype == 'multi-algo'
+elif nettype == 'multi-algo':
    nodeinfo = rpc_connection.getinfo()
-   data = {'nettype': nettype, 'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty_sha256d': str(nodeinfo['difficulty_sha256d']), 'difficulty_scrypt': str(nodeinfo['difficulty_scrypt']), 'difficulty_groestl': str(nodeinfo['difficulty_groestl']), 'difficulty_skein': str(nodeinfo['difficulty_skein']), 'difficulty_qubit': str(nodeinfo['difficulty_qubit']), 'random': randomness)}
+   data = {'nettype': nettype, 'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty_sha256d': str(nodeinfo['difficulty_sha256d']), 'difficulty_scrypt': str(nodeinfo['difficulty_scrypt']), 'difficulty_groestl': str(nodeinfo['difficulty_groestl']), 'difficulty_skein': str(nodeinfo['difficulty_skein']), 'difficulty_qubit': str(nodeinfo['difficulty_qubit']), 'random': randomness}
+else:
+   print("Error: Unknown nettype")
+   exit()
 
 
 json_data = json.dumps(data)
