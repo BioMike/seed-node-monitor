@@ -110,6 +110,11 @@ def delete_node(db):
    name = input("Node ip address: ")
    db.delete_node(name)
 
+def change_settings(db):
+   setting = input("Setting name (nettype): ")
+   value = input("New value: ")
+   db.set_conf(setting, value)
+
 
 parser = argparse.ArgumentParser(description='seed-node-monitor database utility')
 parser.add_argument('--database', required=True, help='Database file to work on')
