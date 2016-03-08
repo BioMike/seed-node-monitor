@@ -122,7 +122,7 @@ function reload_data() {
 	    skein_element.append(diff_skein);
 	    node_element.append(skein_element);
 	    nodelist.append(node_element);
-	    });
+	    );
 	});
 	});
     };

@@ -62,7 +62,7 @@ class Database
 	$result = $stmt->execute();
 	}
 
-function update_node_ma($ip_address, $blocks, $conn, $diff_sha, $diff_scrypt, $diff_groestl, $diff_qubit, $diff_skein)
+    function update_node_ma($ip_address, $blocks, $conn, $diff_sha, $diff_scrypt, $diff_groestl, $diff_qubit, $diff_skein)
 	{
 	$now = time();
 	$stmt = $this->db->prepare("UPDATE seeds_ma SET blocks=:blocks, connections=:conn, difficulty_sha256=:sha, difficulty_scrypt=:scrypt, difficulty_groestl=:groestl, difficulty_qubit=:qubit, difficulty_skein=:skein, timepoint=:now WHERE ip_address=:ip");

@@ -50,19 +50,27 @@ if($iv && $msg)
 
     $data = json_decode(ltrim($json_data), true);
 
-    if($db->get_conf("nettype") == 0 && $data['nettype'] == 'default')
+    if(!array_key_exists('nettype', $data))
 	{
+	// Not upgraded nodes.
 	$db->update_node($ip_address, $data['blocks'], $data['connections'], $data['difficulty'], $data['nethashrate']);
 	}
 	else
 	{
-	if($data['nettype'] == 'multi-algo')
+        if($db->get_conf("nettype") == 0 && $data['nettype'] == 'default')
 	    {
-	    $db->update_node_ma($ip_address, $data['blocks'], $data['connections'], $data['difficulty_sha256'], $data['difficulty_scrypt'], $data['difficulty_groestl'], $data['difficulty_qubit'], $data['difficulty_skein']);
+	    $db->update_node($ip_address, $data['blocks'], $data['connections'], $data['difficulty'], $data['nethashrate']);
 	    }
 	    else
 	    {
-	    die("Nettype mismatch.");
+	    if($data['nettype'] == 'multi-algo')
+		{
+		$db->update_node_ma($ip_address, $data['blocks'], $data['connections'], $data['difficulty_sha256d'], $data['difficulty_scrypt'], $data['difficulty_groestl'], $data['difficulty_qubit'], $data['difficulty_skein']);
+		}
+		else
+		{
+		die("Nettype mismatch.");
+		}
 	    }
 	}
     }

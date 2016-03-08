@@ -44,13 +44,15 @@ class Database:
          self.db.commit()
          self.set_conf("hooks-slack-timeout", 0)
          self.set_conf("version", 1)
-      if version is 1:
+      if version is '1':
          print("Increasing database version to 2.")
          self.cur.execute("CREATE TABLE seeds_ma (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty_sha256d REAL, difficulty_scrypt REAL, difficulty_groestl REAL, difficulty_qubit REAL, difficulty_skein REAL)")
          self.db.commit()
          # Copy over node data to the new table.
          node_data = self.get_nodes()
-         self.cur.execute("INSERT INTO seeds_ma (ip_address, password, name, timepoint, blocks, connections, difficulty_sha256, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein) VALUES (?, ?, ?, ?, 0, 0, 0, 0, 0, 0, 0)", (ip_address, password, name, now))
+         now = int(time.time())
+         for node in node_data:
+            self.cur.execute("INSERT INTO seeds_ma (ip_address, password, name, timepoint, blocks, connections, difficulty_sha256d, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein) VALUES (?, ?, ?, ?, 0, 0, 0, 0, 0, 0, 0)", (str(node[0]), str(node[1]), str(node[2]), now))
          self.db.commit()
          self.set_conf("version", 2)
          self.set_conf("slack-hook", 0)
@@ -67,7 +69,7 @@ class Database:
       if result is None:
          return(False)
       else:
-         return(result)
+         return(result[0])
    
    def set_conf(self, key, value):
       if self.get_conf(key) is not False:
@@ -77,9 +79,9 @@ class Database:
       self.db.commit()
 
    def get_nodes(self):
-      if self.get_conf("nettype") == 0:
+      if self.get_conf("nettype") == '0':
          self.cur.execute('SELECT * FROM seeds')
-      elif self.get_conf("nettype") == 1:
+      elif self.get_conf("nettype") == '1':
          self.cur.execute('SELECT * FROM seeds_ma')
       return(self.cur.fetchall())
 
@@ -91,7 +93,7 @@ class Database:
       password="%s-%s-%s" % (word1, word2, word3)
       now = int(time.time())
       self.cur.execute("INSERT INTO seeds (ip_address, password, name, timepoint, blocks, connections, difficulty, nethashrate) VALUES (?, ?, ?, ?, 0, 0, 0, 0)", (ip_address, password, name, now))
-      self.cur.execute("INSERT INTO seeds_ma (ip_address, password, name, timepoint, blocks, connections, difficulty_sha256, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein) VALUES (?, ?, ?, ?, 0, 0, 0, 0, 0, 0)", (ip_address, password, name, now))
+      self.cur.execute("INSERT INTO seeds_ma (ip_address, password, name, timepoint, blocks, connections, difficulty_sha256d, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein) VALUES (?, ?, ?, ?, 0, 0, 0, 0, 0, 0)", (ip_address, password, name, now))
       self.db.commit()
 
    def delete_node(self, name):
