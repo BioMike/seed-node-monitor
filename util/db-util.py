@@ -29,18 +29,31 @@ class Database:
 
    def create_database(self):
       self.cur.execute("CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)")
+      self.cur.execute("CREATE TABLE seeds_ma (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty_sha256d REAL, difficulty_scrypt REAL, difficulty_groestl REAL, difficulty_qubit REAL, difficulty_skein REAL)")
       self.cur.execute("CREATE TABLE config (confkey TEXT UNIQUE, confval TEXT)")
       self.db.commit()
-      self.set_conf("version", 1)
+      self.set_conf("version", 2)
+      self.set_conf("nettype", 0) # 0 = default, 1 = multi-algo
       self.set_conf("hooks-slack-timeout", 0)
 
    def update_database(self):
       version = self.get_conf("version")
       if version is False:
+         print("Increasing database version to 1.")
          self.cur.execute("CREATE TABLE config (confkey TEXT UNIQUE, confval TEXT)")
          self.db.commit()
          self.set_conf("hooks-slack-timeout", 0)
          self.set_conf("version", 1)
+      if version is 1:
+         print("Increasing database version to 2.")
+         self.cur.execute("CREATE TABLE seeds_ma (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty_sha256d REAL, difficulty_scrypt REAL, difficulty_groestl REAL, difficulty_qubit REAL, difficulty_skein REAL)")
+         self.db.commit()
+         # Copy over node data to the new table.
+         node_data = self.get_nodes()
+         self.cur.execute("INSERT INTO seeds_ma (ip_address, password, name, timepoint, blocks, connections, difficulty_sha256, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein) VALUES (?, ?, ?, ?, 0, 0, 0, 0, 0, 0, 0)", (ip_address, password, name, now))
+         self.db.commit()
+         self.set_conf("version", 2)
+         self.set_conf("slack-hook", 0)
       updated_version = self.get_conf("version")
       print("Database updated to version %s" % (updated_version))
 
@@ -64,7 +77,10 @@ class Database:
       self.db.commit()
 
    def get_nodes(self):
-      self.cur.execute('SELECT * FROM seeds')
+      if self.get_conf("nettype") == 0:
+         self.cur.execute('SELECT * FROM seeds')
+      elif self.get_conf("nettype") == 1:
+         self.cur.execute('SELECT * FROM seeds_ma')
       return(self.cur.fetchall())
 
    def insert_node(self, ip_address, name):
@@ -75,10 +91,12 @@ class Database:
       password="%s-%s-%s" % (word1, word2, word3)
       now = int(time.time())
       self.cur.execute("INSERT INTO seeds (ip_address, password, name, timepoint, blocks, connections, difficulty, nethashrate) VALUES (?, ?, ?, ?, 0, 0, 0, 0)", (ip_address, password, name, now))
+      self.cur.execute("INSERT INTO seeds_ma (ip_address, password, name, timepoint, blocks, connections, difficulty_sha256, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein) VALUES (?, ?, ?, ?, 0, 0, 0, 0, 0, 0)", (ip_address, password, name, now))
       self.db.commit()
 
    def delete_node(self, name):
       self.cur.execute("DELETE FROM seeds WHERE name=?", (name, ))
+      self.cur.execute("DELETE FROM seeds_ma WHERE name=?", (name, ))
       self.db.commit()
 
 def new_node(db):

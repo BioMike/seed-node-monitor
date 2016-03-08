@@ -40,6 +40,7 @@ class Database
 	if($db_new)
 	    {
 	    $this->db->exec("CREATE TABLE seeds (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty REAL, nethashrate INTEGER)");
+	    $this->db->exec("CREATE TABLE seeds_ma (ip_address TEXT UNIQUE, password TEXT, name TEXT, timepoint INTEGER, blocks INTEGER, connections INTEGER, difficulty_sha256d REAL, difficulty_scrypt REAL, difficulty_groestl REAL, difficulty_qubit REAL, , difficulty_skein REAL)");
 	    }
 	}
 
@@ -61,9 +62,32 @@ class Database
 	$result = $stmt->execute();
 	}
 
+function update_node_ma($ip_address, $blocks, $conn, $diff_sha, $diff_scrypt, $diff_groestl, $diff_qubit, $diff_skein)
+	{
+	$now = time();
+	$stmt = $this->db->prepare("UPDATE seeds_ma SET blocks=:blocks, connections=:conn, difficulty_sha256=:sha, difficulty_scrypt=:scrypt, difficulty_groestl=:groestl, difficulty_qubit=:qubit, difficulty_skein=:skein, timepoint=:now WHERE ip_address=:ip");
+	$stmt->bindValue(':ip', $ip_address, SQLITE3_TEXT);
+	$stmt->bindValue(':blocks', $blocks, SQLITE3_INTEGER);
+	$stmt->bindValue(':conn', $conn, SQLITE3_INTEGER);
+	$stmt->bindValue(':sha', $diff_sha);
+	$stmt->bindValue(':scrypt', $diff_scrypt);
+	$stmt->bindValue(':groestl', $diff_groestl);
+	$stmt->bindValue(':qubit', $diff_qubit);
+	$stmt->bindValue(':skein', $diff_skein);
+	$stmt->bindValue(':now', $now, SQLITE3_INTEGER);
+	$result = $stmt->execute();
+	}
+
     function get_password($ip_address)
 	{
-	$stmt = $this->db->prepare("SELECT password FROM seeds WHERE ip_address=:ip LIMIT 1");
+	if($this->get_conf("nettype") == 0)
+	    {
+	    $stmt = $this->db->prepare("SELECT password FROM seeds WHERE ip_address=:ip LIMIT 1");
+	    }
+	    else
+	    {
+	    $stmt = $this->db->prepare("SELECT password FROM seeds_ma WHERE ip_address=:ip LIMIT 1");
+	    }
 	$stmt->bindValue(':ip', $ip_address, SQLITE3_TEXT);
 	$result = $stmt->execute();
 	if($result->numColumns())
@@ -82,7 +106,14 @@ class Database
     function get_seeds_data()
 	{
 	$return_data = array();
-	$stmt = $this->db->prepare("SELECT name, timepoint, blocks, connections, difficulty, nethashrate FROM seeds");
+	if($this->get_conf("nettype") == 0)
+	    {
+	    $stmt = $this->db->prepare("SELECT name, timepoint, blocks, connections, difficulty, nethashrate FROM seeds");
+	    }
+	    else
+	    {
+	    $stmt = $this->db->prepare("SELECT name, timepoint, blocks, connections, difficulty_sha256, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein FROM seeds");
+	    }
 	$result = $stmt->execute();
 	while($data = $result->fetchArray(SQLITE3_ASSOC))
 	    {
@@ -96,7 +127,14 @@ class Database
 	// Get nodes that haven't connected in 5 minutes.
 	$timed_out = time() - 5*60;
 	$return_data = array();
-	$stmt = $this->db->prepare("SELECT name FROM seeds WHERE timepoint<:timedout");
+	if($this->get_conf("nettype") == 0)
+	    {
+	    $stmt = $this->db->prepare("SELECT name FROM seeds WHERE timepoint<:timedout");
+	    }
+	    else
+	    {
+	    $stmt = $this->db->prepare("SELECT name FROM seeds_ma WHERE timepoint<:timedout");
+	    }
 	$stmt->bindValue(':timedout', $timed_out, SQLITE3_INTEGER);
 	$result = $stmt->execute();
 	while($data = $result->fetchArray(SQLITE3_ASSOC))
@@ -113,14 +151,6 @@ class Database
 	$result = $stmt->execute();
 	$data = $result->fetchArray(SQLITE3_ASSOC);
 	return($data["confval"]);
-	}
-
-    function set_conf($confkey, $confval)
-	{
-	$stmt = $this->db->prepare("UPDATE config SET confval=:confval WHERE confkey=:confkey");
-	$stmt->bindValue(':confval', $confval, SQLITE3_TEXT);
-	$stmt->bindValue(':confkey', $confkey, SQLITE3_TEXT);
-	$result = $stmt->execute();
 	}
     }
 ?>

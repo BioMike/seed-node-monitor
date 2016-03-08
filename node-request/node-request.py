@@ -38,24 +38,33 @@ rpc_port = '12341'
 
 # Settings, most likely not to change them
 monitor_url = 'http://seeds.auroracoin.is/API/node-connector.php'
+# nettype: default or multi-algo
+nettype = 'multi-algo'
 
 # Connecting to node
 rpc_connection = AuthServiceProxy("http://%s:%s@%s:%s" % (rpc_user, rpc_password, rpc_host, rpc_port))
 
-# Collect data
-nodeinfo = rpc_connection.getinfo()
-networkhps = rpc_connection.getnetworkhashps()
-difficulty = rpc_connection.getdifficulty()
 randomness = random.randint(0, 800000)
 
-# Build JSON object
-# {'protocolversion': 2000000, 'errors': '', 'blocks': 157595, 'paytxfee': Decimal('0E-8'), 'keypoolsize': 103, 'walletversion': 60000, 
-# 'keypoololdest': 1433533648, 'testnet': False, 'version': 80705, 'connections': 3, 'proxy': '', 'mininput': Decimal('0.00001000'), 
-# 'balance': Decimal('0E-8'), 'timeoffset': 0, 'difficulty': Decimal('153.73652958')}
-# 2111779983
-#print(nodeinfo)
-#print(networkhps)
-data = {'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty': str(difficulty), 'nethashrate': networkhps, 'random': randomness}
+if nettype == 'default':
+   # Collect data
+   nodeinfo = rpc_connection.getinfo()
+   networkhps = rpc_connection.getnetworkhashps()
+   difficulty = rpc_connection.getdifficulty()
+
+   # Build JSON object
+   # {'protocolversion': 2000000, 'errors': '', 'blocks': 157595, 'paytxfee': Decimal('0E-8'), 'keypoolsize': 103, 'walletversion': 60000, 
+   # 'keypoololdest': 1433533648, 'testnet': False, 'version': 80705, 'connections': 3, 'proxy': '', 'mininput': Decimal('0.00001000'), 
+   # 'balance': Decimal('0E-8'), 'timeoffset': 0, 'difficulty': Decimal('153.73652958')}
+   # 2111779983
+   #print(nodeinfo)
+   #print(networkhps)
+   data = {'nettype': nettype, 'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty': str(difficulty), 'nethashrate': networkhps, 'random': randomness}
+elif nettype == 'multi-algo'
+   nodeinfo = rpc_connection.getinfo()
+   data = {'nettype': nettype, 'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty_sha256d': str(nodeinfo['difficulty_sha256d']), 'difficulty_scrypt': str(nodeinfo['difficulty_scrypt']), 'difficulty_groestl': str(nodeinfo['difficulty_groestl']), 'difficulty_skein': str(nodeinfo['difficulty_skein']), 'difficulty_qubit': str(nodeinfo['difficulty_qubit']), 'random': randomness)}
+
+
 json_data = json.dumps(data)
 
 #print(json_data)

@@ -36,7 +36,7 @@ $password = $db->get_password($ip_address);
 if(!$password)
     {
     // Node not found.
-    die();
+    die("Node not found.");
     }
 $key = mb_convert_encoding($password, "UTF-8");
 
@@ -50,25 +50,41 @@ if($iv && $msg)
 
     $data = json_decode(ltrim($json_data), true);
 
-    $db->update_node($ip_address, $data['blocks'], $data['connections'], $data['difficulty'], $data['nethashrate']);
-    }
-
-$offline_nodes = $db->get_offline_nodes();
-if(count($offline_nodes) > 0)
-    {
-    $timeout = $db->get_conf("hooks-slack-timeout");
-    if($timeout < time())
+    if($db->get_conf("nettype") == 0 && $data['nettype'] == 'default')
 	{
-	// Run Slack webhook.
-	foreach($offline_nodes as $name)
+	$db->update_node($ip_address, $data['blocks'], $data['connections'], $data['difficulty'], $data['nethashrate']);
+	}
+	else
+	{
+	if($data['nettype'] == 'multi-algo')
 	    {
-	    $message = "Seed node $name seems to be offline.";
-	    slack_send($message);
+	    $db->update_node_ma($ip_address, $data['blocks'], $data['connections'], $data['difficulty_sha256'], $data['difficulty_scrypt'], $data['difficulty_groestl'], $data['difficulty_qubit'], $data['difficulty_skein']);
 	    }
-	// Update the timeout, 1 hour.
-	$to_till = time() + 60*60;
-	$db->set_conf("hooks-slack-timeout", $to_till);
+	    else
+	    {
+	    die("Nettype mismatch.");
+	    }
 	}
     }
 
+if($db->get_conf("slack-hook") == 1)
+    {
+    $offline_nodes = $db->get_offline_nodes();
+    if(count($offline_nodes) > 0)
+	{
+	$timeout = $db->get_conf("hooks-slack-timeout");
+	if($timeout < time())
+	    {
+	    // Run Slack webhook.
+	    foreach($offline_nodes as $name)
+		{
+		$message = "Seed node $name seems to be offline.";
+		slack_send($message);
+		}
+	    // Update the timeout, 1 hour.
+	    $to_till = time() + 60*60;
+	    $db->set_conf("hooks-slack-timeout", $to_till);
+	    }
+	}
+    }
 ?>
