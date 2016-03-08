@@ -112,7 +112,7 @@ class Database
 	    }
 	    else
 	    {
-	    $stmt = $this->db->prepare("SELECT name, timepoint, blocks, connections, difficulty_sha256, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein FROM seeds");
+	    $stmt = $this->db->prepare("SELECT name, timepoint, blocks, connections, difficulty_sha256d, difficulty_scrypt, difficulty_groestl, difficulty_qubit, difficulty_skein FROM seeds_ma");
 	    }
 	$result = $stmt->execute();
 	while($data = $result->fetchArray(SQLITE3_ASSOC))
