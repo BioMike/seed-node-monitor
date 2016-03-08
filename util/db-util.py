@@ -164,9 +164,12 @@ while(True):
       new_node(db)
    if(str.upper(command) == "D"):
       delete_node(db)
+   if(str.upper(command) == "S"):
+      change_settings(db)
    if(str.upper(command) == "H"):
       print("\n\nHelp screen:")
       print("H\tThis help screen")
       print("N\tAdd a new node")
       print("D\tDelete a node")
+      print("S\tChange a setting (use with caution!)")
       print("Q\tQuit the util\n\n")
