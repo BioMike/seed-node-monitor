@@ -73,11 +73,11 @@ function reload_data() {
 	    var name = this.name;
 	    var blocks = this.blocks;
 	    var conn = this.connections;
-	    var diff_sha = this.difficulty_sha256;
-	    var diff_scrypt = this.difficulty_scrypt;
-	    var diff_groestl = this.difficulty_groestl;
-	    var diff_qubit = this.difficulty_qubit;
-	    var diff_skein = this.difficulty_skein;
+	    var diff_sha = this.difficulty_sha256.toFixed(2);
+	    var diff_scrypt = this.difficulty_scrypt.toFixed(2);
+	    var diff_groestl = this.difficulty_groestl.toFixed(2);
+	    var diff_qubit = this.difficulty_qubit.toFixed(2);
+	    var diff_skein = this.difficulty_skein.toFixed(2);
 
 	    var node_element = $( "<div />" );
 	    node_element.addClass("node-entry");
