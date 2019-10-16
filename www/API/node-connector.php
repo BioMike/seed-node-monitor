@@ -38,6 +38,7 @@ if(!$password)
     // Node not found.
     die("Node not found.");
     }
+$cipher = 'aes-256-cbc';
 $key = mb_convert_encoding($password, "UTF-8");
 
 $iv = base64_decode($iv_post, true);
@@ -45,8 +46,7 @@ $msg = base64_decode($msg_post, true);
 
 if($iv && $msg)
     {
-    // MCRYPT_RIJNDAEL_128, we use a 16 bit key.
-    $json_data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $msg, MCRYPT_MODE_CBC, $iv);
+    $json_data = openssl_decrypt($msg, $cipher, $key, OPENSSL_RAW_DATA | OPENSSL_NO_PADDING, $iv);
 
     $data = json_decode(ltrim($json_data), true);
 
