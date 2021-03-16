@@ -62,7 +62,8 @@ if nettype == 'default':
    data = {'nettype': nettype, 'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty': str(difficulty), 'nethashrate': networkhps, 'random': randomness}
 elif nettype == 'multi-algo':
    nodeinfo = rpc_connection.getinfo()
-   data = {'nettype': nettype, 'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty_sha256d': str(nodeinfo['difficulty_sha256d']), 'difficulty_scrypt': str(nodeinfo['difficulty_scrypt']), 'difficulty_groestl': str(nodeinfo['difficulty_groestl']), 'difficulty_skein': str(nodeinfo['difficulty_skein']), 'difficulty_qubit': str(nodeinfo['difficulty_qubit']), 'random': randomness}
+   nodemininginfo = rpc_connection.getmininginfo()
+   data = {'nettype': nettype, 'blocks': nodeinfo['blocks'], 'connections': nodeinfo['connections'], 'difficulty_sha256d': str(nodemininginfo['difficulty_sha256d']), 'difficulty_scrypt': str(nodemininginfo['difficulty_scrypt']), 'difficulty_groestl': str(nodemininginfo['difficulty_groestl']), 'difficulty_skein': str(nodemininginfo['difficulty_skein']), 'difficulty_qubit': str(nodemininginfo['difficulty_qubit']), 'random': randomness}
 else:
    print("Error: Unknown nettype")
    exit()
